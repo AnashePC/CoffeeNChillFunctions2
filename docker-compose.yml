@@ -1,0 +1,54 @@
+# One command starts the whole stack:   docker compose up
+# The Functions image is PULLED from Docker Hub (no local "build:" paths).
+# Set DOCKERHUB_USERNAME in .env (copy .env.example) before running.
+
+name: coffeenchill
+
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    container_name: coffeenchill-azurite
+    command: >
+      azurite --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0
+      --location /data --skipApiVersionCheck --loose
+    ports:
+      - "10000:10000"   # Blob
+      - "10001:10001"   # Queue
+      - "10002:10002"   # Table
+    volumes:
+      - azurite-data:/data
+    networks:
+      - coffeenchill-net
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 10000 && nc -z 127.0.0.1 10001 && nc -z 127.0.0.1 10002"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+
+  functions:
+    image: ${DOCKERHUB_USERNAME}/coffeenchill-functions:v2.0
+    container_name: coffeenchill-functions
+    pull_policy: always
+    depends_on:
+      azurite:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      FUNCTIONS_WORKER_RUNTIME: dotnet-isolated
+      ORDER_STEP_DELAY_SECONDS: "3"
+      ENABLE_TEST_ENDPOINTS: "true"   # exposes POST /api/orders/queue/test-poison for the poison-queue demo
+      # Azurite's public development key - NOT a secret. Host name "azurite" resolves on the compose network.
+      AzureWebJobsStorage: >-
+        DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;TableEndpoint=http://azurite:10002/devstoreaccount1;
+    networks:
+      - coffeenchill-net
+    restart: unless-stopped
+
+networks:
+  coffeenchill-net:
+    driver: bridge
+
+volumes:
+  azurite-data:
