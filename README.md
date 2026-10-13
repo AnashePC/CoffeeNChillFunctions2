@@ -160,6 +160,6 @@ You can also watch it live: `docker compose logs -f functions`.
 * Standalone multi-stage Dockerfile, Postman collection with `{{baseUrl}}`, documentation.
 
 ## Team contributions
-| Member | Student no. | Role / contribution |
+| Member | Student no. | Contribution |
 |---|---|---|
-| _fill in_ | | |
+| Anashe Pride Choruma | ST10402626 | Completed all project work, including planning, design, architecture, implementation, testing, and documentation. |

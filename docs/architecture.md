@@ -63,7 +63,6 @@ Partitioning by category makes `GET /api/menu/category/{category}` a single-part
 ```
 
 ## Team contributions
-
 | Member | Student no. | Contribution |
 |---|---|---|
-| Anashe Pride Choruma | [Your student number] | Completed all project work, including planning, design, architecture, implementation, testing, and documentation. |
+| Anashe Pride Choruma | ST10402626 | Completed all project work, including planning, design, architecture, implementation, testing, and documentation. |
