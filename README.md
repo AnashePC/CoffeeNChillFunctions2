@@ -5,7 +5,7 @@ menu management (Azure Table Storage), staff document storage (Azure Blob Storag
 
 * Part 1 video: **<paste unlisted YouTube link here>**
 * Part 2 video (docker-compose up + queue testing): **<paste unlisted YouTube link here>**
-* Docker Hub images: **<dockerhub-username>/coffeenchill-functions:v1.0** (Part 1) and **:v2.0** (Part 2)
+* Docker Hub images: **apchoruma/coffeenchill-functions:v1.0** (Part 1) and **:v2.0** (Part 2)
 * Architecture & endpoint table: [docs/architecture.md](docs/architecture.md)
 
 ## Repository layout
@@ -36,12 +36,12 @@ docker-compose.yml          Azurite + Functions host (image pulled from Docker H
 azurite --silent --location ./azurite-data --skipApiVersionCheck --blobHost 0.0.0.0 --queueHost 0.0.0.0 --tableHost 0.0.0.0
 
 # 2. Build and tag
-docker build -t <dockerhub-username>/coffeenchill-functions:v1.0 .
+docker build -t apchoruma/coffeenchill-functions:v1.0 .
 
 # 3. Run – storage connection string is passed via the CLI, port 8080 -> 80
 docker run --rm -p 8080:80 \
   -e "AzureWebJobsStorage=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://host.docker.internal:10000/devstoreaccount1;TableEndpoint=http://host.docker.internal:10002/devstoreaccount1;QueueEndpoint=http://host.docker.internal:10001/devstoreaccount1;" \
-  <dockerhub-username>/coffeenchill-functions:v1.0
+  apchoruma/coffeenchill-functions:v1.0
 ```
 On Linux add `--add-host=host.docker.internal:host-gateway`. The API is then at `http://localhost:8080/api`.
 (The account key above is Azurite's public well-known development key, not a secret.)
@@ -49,9 +49,9 @@ On Linux add `--add-host=host.docker.internal:host-gateway`. The API is then at 
 ### Publish to Docker Hub
 ```bash
 docker login
-docker push <dockerhub-username>/coffeenchill-functions:v1.0
-docker tag  <dockerhub-username>/coffeenchill-functions:v1.0 <dockerhub-username>/coffeenchill-functions:latest
-docker push <dockerhub-username>/coffeenchill-functions:latest
+docker push apchoruma/coffeenchill-functions:v1.0
+docker tag  apchoruma/coffeenchill-functions:v1.0 apchoruma/coffeenchill-functions:latest
+docker push apchoruma/coffeenchill-functions:latest
 ```
 Make sure the repository is set to **Public** on Docker Hub.
 
@@ -108,9 +108,9 @@ docker compose up               # pulls <username>/coffeenchill-functions:v2.0 +
 
 ### Build & publish the v2.0 image (do this before `docker compose up`)
 ```bash
-docker build -t <dockerhub-username>/coffeenchill-functions:v2.0 .
+docker build -t apchoruma/coffeenchill-functions:v2.0 .
 docker login
-docker push <dockerhub-username>/coffeenchill-functions:v2.0
+docker push apchoruma/coffeenchill-functions:v2.0
 ```
 `docker-compose.yml` uses **only** `image:` (no `build:`), so the image must be on Docker Hub (public repo).
 
