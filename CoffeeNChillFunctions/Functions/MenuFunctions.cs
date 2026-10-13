@@ -163,9 +163,13 @@ namespace CoffeeNChillFunctions.Functions
 
         [Function("GetMenuItem")]
         public async Task<HttpResponseData> GetMenuItem(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "menu/{category}/{id}")] HttpRequestData req,
-            string category, string id)
+     [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "menu/{category}/{id}")] HttpRequestData req,
+     string category, string id)
         {
+            // "menu/category/{name}" can be matched by this route first; hand it to the category lookup.
+            if (string.Equals(category, "category", StringComparison.OrdinalIgnoreCase))
+                return await GetMenuItemsByCategory(req, id);
+
             try
             {
                 var result = await GetTableClient().GetEntityAsync<MenuItem>(category, id);
