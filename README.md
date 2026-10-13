@@ -3,8 +3,8 @@
 .NET 8 isolated Azure Functions API for the Coffee N Chill cafe:
 menu management (Azure Table Storage), staff document storage (Azure Blob Storage) and **asynchronous order processing (Azure Storage Queue → Orders table)**, runnable locally against **Azurite**, as a standalone **Docker** image, or as a full stack with **Docker Compose**.
 
-* Part 1 video: **<paste unlisted YouTube link here>**
-* Part 2 video (docker-compose up + queue testing): **<paste unlisted YouTube link here>**
+* Part 1 video: **<N/A>**
+* Part 2 video (docker-compose up + queue testing): **<https://youtu.be/NiZZTYPtQTc>**
 * Docker Hub images: **apchoruma/coffeenchill-functions:v1.0** (Part 1) and **:v2.0** (Part 2)
 * Architecture & endpoint table: [docs/architecture.md](docs/architecture.md)
 
